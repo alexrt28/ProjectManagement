@@ -33,15 +33,7 @@ def main():
         # Call Function for each Selection
         if choice == 1:
             # Call AddTask function
-            print("\n")
-            task_name = input("Enter the name of the task: ")
-            task_description = input("Enter the description of the task: ")
-            task_priority = int(input("Enter the priority of the task: "))
-
-            # This section gets the deadline of the task from the user and converts it to a datetime object
-            task_date = input("Enter the deadline of the task (MM/DD/YYYY): ")
-            # Creates the new task object to be added to the Prioirty Queue
-            new_task = Task(task_name, task_description, task_priority, task_date)
+            AddTask(task_queue)
 
 
         elif choice == 2:
