@@ -33,3 +33,13 @@ class PriorityQueue:
                 break
         else:
             print("Task not found.")
+
+    def complete_task(self, task_name):
+        """Mark a task as completed."""
+        for task in self.queue:
+            if task.get_name() == task_name:  # Find the task by name
+                task.complete()  # Mark the task as completed
+                print(f"Task '{task_name}' marked as completed.")
+                break
+        else:
+            print("Task not found.")
