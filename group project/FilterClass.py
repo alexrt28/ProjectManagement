@@ -1,6 +1,6 @@
 from datetime import datetime
 
-class TaskFilter:
+class Filter:
     def __init__(self, tasks):
         self.tasks = tasks
 
