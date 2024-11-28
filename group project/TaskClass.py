@@ -3,6 +3,8 @@ from datetime import datetime
 
 class Task:
     def __init__(self, name, description, priority, deadline):
+        """Initialize the Task object with a name, description, priority, and deadline.
+        Deadline is a string in the format MM/DD/YYYY"""
         self.name = name
         self.description = description
         self.priority = priority
@@ -11,8 +13,10 @@ class Task:
         except ValueError:
             print("Invalid date format. Please use the format MM/DD/YYYY (e.g 5/2/2024).")
 
+        self.priority_str = {1: "Extreme", 2: "High", 3: "Medium", 4: "Low"}
+
     def __str__(self):
-        return (f'Task: {self.name}\nDescription: {self.description}\nPriority: {self.priority}\nDeadline: {self.deadline.strftime("%m/%d/%Y")}')
+        return (f'Task Name: {self.name}\nDescription: {self.description}\nPriority: {self.priority_str[self.priority]}\nDeadline: {self.deadline.strftime("%m/%d/%Y")}')
 
     def get_name(self):
         return self.name
@@ -24,19 +28,8 @@ class Task:
         return self.priority
 
     def get_deadline(self):
-        return self.deadline
+        return self.deadline.strftime("%m/%d/%Y")
     
-    def update_task(self, name, description, priority, deadline):
-        if name == "":
-            name = self.name
-        if description == "":
-            description = self.description
-        if priority == "":
-            priority = self.priority
-        if deadline == "":
-            deadline = self.deadline
-
+    def update_task(self, name, description):
         self.name = name
         self.description = description
-        self.priority = int(priority)
-        self.deadline = deadline

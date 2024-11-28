@@ -1,5 +1,6 @@
 from datetime import datetime
 from TaskClass import Task
+from PriorityQueue import TaskPriorityQueue
 
 
 def main():
@@ -9,8 +10,12 @@ def main():
     choice = 0  # int variable to hold user's menu choice
     year, month, day = 0, 0, 0  # int variables to hold the year, month, and day of the task's deadline
 
+    # Create a new TaskPriorityQueue object
+    task_queue = TaskPriorityQueue()
+
     # Choice Selection Menu
     while choice != 6:
+        choice = 0
         print("Select an option from below:")
         print("1. Add a Task")
         print("2. Update a Task")
@@ -33,51 +38,78 @@ def main():
         # Call Function for each Selection
         if choice == 1:
             # Call AddTask function
+            print("\nAdding a Task")
             AddTask(task_queue)
-
 
         elif choice == 2:
             # Call UpdateTask function
-            print("\n")
-            AddTask()
-
+            print("\nUpdating a Task")
+            UpdateTask(task_queue)
 
         elif choice == 3:
             # Call DeleteTask function
-            print("\n")
+            DeleteTask(task_queue)
+
         elif choice == 4:
             # Call CompleteTask function
-            print("\n")
+            print("")
+            CompleteTask(task_queue)
+            
         elif choice == 5:
-            # Call ViewTasks function
-            print("\n")
-            print(new_task) # Temporary print statement to test if printing the task works
+            # Prints all of the tasks in the queue
+            task_queue.show_tasks()
 
 
 
 def AddTask(task_queue):
     task_name = input("Enter the name of the task: ")
     task_description = input("Enter the description of the task: ")
-    task_priority = int(input("Enter the priority of the task: "))
+
+    task_priority = int(input("Enter the priority of the task (1/2/3/4 = Extreme/High/Medium/Low Priority): "))
+
+    while task_priority < 1 or task_priority > 4:
+        print("\n*********************************************************************")
+        print("ERROR: Priority must be an integer between 1 and 4. Please try again")
+        print("*********************************************************************\n")
+        task_priority = int(input("Enter the priority of the task (1/2/3/4 = Extreme/High/Medium/Low Priority): "))
 
     # This section gets the deadline of the task from the user and converts it to a datetime object
     task_date = input("Enter the deadline of the task (MM/DD/YYYY): ")
     # Creates the new task object to be added to the Prioirty Queue
     new_task = Task(task_name, task_description, task_priority, task_date)
+    task_queue.add_task(new_task)
     
 
 
 def UpdateTask(task_queue):
     task_name = input("Enter the name of the task to be updated: ")
+
+    if task_queue.isEmpty():
+        print("No tasks in the queue.")
+    elif task_queue.get_task(task_name) is None:
+        print("Task not found.")
+    else:   
+        print("Below you will be input fields to update each of the task's information, type \"SAME\" (0 for priority) if you do not want to update that information.")
+        update_name = input("Enter the updated name of the task: ")
+        update_description = input("Enter the upated description of the task: ")
+
+        update_priority = int(input("Enter the updated priority of the task (1/2/3/4 = Extreme/High/Medium/Low Priority, 0 for no change) : "))
+        while update_priority < 0 or update_priority > 4:
+            print("\n*********************************************************************")
+            print("ERROR: Updated Priority must be an integer between 0 and 4. Please try again")
+            print("*********************************************************************\n")
+            task_priority = int(input("Enter the priority of the task (1/2/3/4 = Extreme/High/Medium/Low Priority, 0 for no change): "))
+
+        update_deadline = input("Enter the updated deadline of the task (MM/DD/YYYY): ")
+
+        task_queue.update_task(task_name,update_name, update_description, update_priority, update_deadline)
     
-    print("Below you will be input fields to update each of the task's information, leave a field blank to not make any changes.")
-    update_name = input("Enter the updated name of the task: ")
-    update_description = input("Enter the upated description of the task: ")
-    update_priority = input("Enter the updated priority of the task: ")
-    update_deadline = input("Enter the updated deadline of the task (MM/DD/YYYY): ")
+def DeleteTask(task_queue):
+    task_name = input("Enter the name of the task to be deleted: ")
+    task_queue.remove_task(task_name)
 
-    task_queue.update_tasks(update_name, update_description, update_priority, update_deadline)
-
+def CompleteTask(task_queue):
+    task_queue.complete_task()
 
 
 
