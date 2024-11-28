@@ -14,7 +14,7 @@ def main():
     task_queue = TaskPriorityQueue()
 
     # Choice Selection Menu
-    while choice != 6:
+    while choice != 7:
         choice = 0
         print("Select an option from below:")
         print("1. Add a Task")
@@ -22,17 +22,18 @@ def main():
         print("3. Delete a Task")
         print("4. Complete a Task")
         print("5. View all Tasks")
-        print("6. Exit Program")
+        print("6. Filter a Task")
+        print("7. Exit Program")
         # Tries to input user's choice, if any error, print error message and loops back to get user's input again
         try:
             choice = int(input("Enter choice number here: "))
-            if choice < 1 or choice > 6:
+            if choice < 1 or choice > 7:
                 print("\n*********************************************************************")
-                print("ERROR: Choice must be an integer between 1 and 6. Please try again")
+                print("ERROR: Choice must be an integer between 1 and 7. Please try again")
                 print("*********************************************************************\n")
         except ValueError:
             print("\n*********************************************************************")
-            print("ERROR: Choice must be an integer between 1 and 6. Please try again")
+            print("ERROR: Choice must be an integer between 1 and 7. Please try again")
             print("*********************************************************************\n")
 
         # Call Function for each Selection
@@ -59,6 +60,9 @@ def main():
             # Prints all of the tasks in the queue
             task_queue.show_tasks()
 
+        elif choice == 6:
+            # Calll Filtering Function
+            FilterTasks(task_queue)
 
 
 def AddTask(task_queue):
@@ -112,6 +116,32 @@ def CompleteTask(task_queue):
     task_queue.complete_task()
 
 
+def FilterTasks(task_queue):
+    if task_queue.isEmpty():
+        print("No tasks in the queue.")
+        return
+    
+    task_filter = TaskFilter(task_queue.queue)
+    print("\nFilter Options:")
+    print("1. Filter by Keyword")
+    print("2. Filter by Priority")
+    print("3. Filter by Deadline")
+
+    try:
+        filter_choice = int(input("Enter filter option number: "))
+        if filter_choice == 1:
+            keyword = input("Enter keyword to search: ")
+            task_filter.filter_by_keyword(keyword)
+        elif filter_choice == 2:
+            priority = int(input("Enter priority level (1/2/3/4 = Extreme/High/Medium/Low): "))
+            task_filter.filter_by_priority(priority)
+        elif filter_choice == 3:
+            deadline = input("Enter deadline (MM/DD/YYYY): ")
+            task_filter.filter_by_deadline(deadline)
+        else:
+            print("Invalid option. Returning to main menu.")
+    except ValueError:
+        print("Invalid input. Returning to main menu.")
 
 
 if __name__ == "__main__":
