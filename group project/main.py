@@ -1,7 +1,7 @@
 from datetime import datetime
 from TaskClass import Task
 from PriorityQueue import TaskPriorityQueue
-
+from FilterClass import Filter
 
 def main():
     task_name, task_description, task_date = "","",""  # Holds the string information the user input
