@@ -39,29 +39,30 @@ class TaskPriorityQueue:
                 elif new_task.get_priority() == self.queue[i].get_priority():
                     if new_task.get_deadline() < self.queue[i].get_deadline():
                         self.queue.insert(i, new_task)  # Insert the task at the appropriate location in the queue.
-                        return
-            self.queue.append(new_task) 
+                        return 
+            self.queue.append(new_task)
 
     def show_tasks(self):
         """View all tasks in the queue."""
         if self.isEmpty():
-            print("No tasks in the queue.")
+            print("\nNo tasks in the queue.\n")
         else:
-            print ("All tasks in the queue:")
+            print ("\nAll tasks in the queue:")
             for task in self:
-                print(f'------------------------------\n{task}\n------------------------------')  # Use Task's __str__ method to display task details.
+                print(f'------------------------------\n{task}')  # Show all the tasks in the queue by using the __str__ method of the Task class
+            print("------------------------------\n")
 
     def update_task(self, task_name, new_name, new_description, new_priority, new_deadline):
         """Update a task by its name.
         If the priority or deadline is updated, remove old task with new one so that the queue is ordered correctly
         If only the name or description is updated, just call the update_task method on the task"""
         if self.isEmpty():
-            print("No tasks in the queue.")
+            return ("No tasks in the queue.")
         else:
             old_task = self.get_task(task_name)
             
             if old_task is None:
-                print("Task not found.")
+                return ("Task not found.")
             else:
                 if new_name.upper() == "SAME":
                     new_name = old_task.get_name()
@@ -69,7 +70,7 @@ class TaskPriorityQueue:
                     new_description = old_task.get_description()
                 if new_priority == 0:
                     new_priority = old_task.get_priority()
-                if new_deadline.Upper() == "SAME":
+                if new_deadline.upper() == "SAME":
                     new_deadline = old_task.get_deadline()
 
                 if new_priority != None or new_deadline != None:  # If the priority or deadline is updated, remove old task with new one
@@ -79,20 +80,24 @@ class TaskPriorityQueue:
                 else:  # If only the name or description is updated, update the old task
                     self.get_task(task_name).update_task(new_name, new_description)
 
+                return ("Task successfully updated.")
+
     def remove_task(self, task_name):
         """Remove a task from the queue."""
         if self.isEmpty():
-            print("No tasks in the queue.")
+            return "No tasks in the queue."
         else:
             for task in self:
                 if task.get_name() == task_name:
-                    print(f"{task} \nTASK SUCCESSFULLY REMOVED!")
                     self.queue.remove(task)  # Remove the task from the queue if it is found
+                    return f'Task: {task_name} successfully removed.'
+                
+            return "Task not found."
 
     def complete_task(self):
         """Remove the highest priority task from the queue and print out that it was completed."""
         if self.isEmpty():
-            print("No tasks in the queue.")
+            print("No tasks in the queue.\n")
         else:
             task = self.queue.pop(0)  # Remove the highest priority task from the list
-            print(f"{task} \nTASK COMPLETED!")  # Print out that the task was completed
+            print(f"{task} \nTASK COMPLETED!\n------------------------------\n")  # Print out that the task was completed
