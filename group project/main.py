@@ -20,9 +20,9 @@ def main():
         print("1. Add a Task")
         print("2. Update a Task")
         print("3. Delete a Task")
-        print("4. Complete a Task")
-        print("5. View all Tasks")
-        print("6. Filter a Task")
+        print("4. Complete Highest Priority Task")
+        print("5. View all Tasks (Filtered by Priority)")
+        print("6. View all Tasks (Custom Filter)")
         print("7. Exit Program")
         # Tries to input user's choice, if any error, print error message and loops back to get user's input again
         try:
@@ -39,21 +39,22 @@ def main():
         # Call Function for each Selection
         if choice == 1:
             # Call AddTask function
-            print("\nAdding a Task")
+            print("\nAdding a Task\n------------------------------")
             AddTask(task_queue)
 
         elif choice == 2:
             # Call UpdateTask function
-            print("\nUpdating a Task")
+            print("\nUpdating a Task\n------------------------------")
             UpdateTask(task_queue)
 
         elif choice == 3:
             # Call DeleteTask function
+            print("\nDeleting a Task\n------------------------------")
             DeleteTask(task_queue)
 
         elif choice == 4:
             # Call CompleteTask function
-            print("")
+            print("\nCompleting Highest Priority Task\n------------------------------")
             CompleteTask(task_queue)
             
         elif choice == 5:
@@ -64,9 +65,11 @@ def main():
             # Calll Filtering Function
             FilterTasks(task_queue)
 
+    print("\nThank you for using this program!")
+
 
 def AddTask(task_queue):
-    task_name = input("Enter the name of the task: ")
+    task_name = input("Enter the name of the task to be added: ")
     task_description = input("Enter the description of the task: ")
 
     task_priority = int(input("Enter the priority of the task (1/2/3/4 = Extreme/High/Medium/Low Priority): "))
@@ -82,6 +85,8 @@ def AddTask(task_queue):
     # Creates the new task object to be added to the Prioirty Queue
     new_task = Task(task_name, task_description, task_priority, task_date)
     task_queue.add_task(new_task)
+
+    print(f'Task: {task_name} added successfully.\n')
     
 
 
@@ -89,28 +94,39 @@ def UpdateTask(task_queue):
     task_name = input("Enter the name of the task to be updated: ")
 
     if task_queue.isEmpty():
-        print("No tasks in the queue.")
+        print("No tasks in the queue.\n")
     elif task_queue.get_task(task_name) is None:
-        print("Task not found.")
+        print("Task not found.\n")
     else:   
         print("Below you will be input fields to update each of the task's information, type \"SAME\" (0 for priority) if you do not want to update that information.")
         update_name = input("Enter the updated name of the task: ")
         update_description = input("Enter the upated description of the task: ")
 
-        update_priority = int(input("Enter the updated priority of the task (1/2/3/4 = Extreme/High/Medium/Low Priority, 0 for no change) : "))
-        while update_priority < 0 or update_priority > 4:
-            print("\n*********************************************************************")
-            print("ERROR: Updated Priority must be an integer between 0 and 4. Please try again")
-            print("*********************************************************************\n")
-            task_priority = int(input("Enter the priority of the task (1/2/3/4 = Extreme/High/Medium/Low Priority, 0 for no change): "))
+        while True:
+            try:
+                update_priority = int(input("Enter the updated priority of the task (1/2/3/4 = Extreme/High/Medium/Low Priority, 0 for no change) : "))
+                while update_priority < 0 or update_priority > 4:
+                    print("\n********************************************************************************")
+                    print("ERROR: Updated Priority must be an integer between 0 and 4. Please try again")
+                    print("********************************************************************************\n")
+                    update_priority = int(input("Enter the priority of the task (1/2/3/4 = Extreme/High/Medium/Low Priority, 0 for no change): "))
+                break
+            except ValueError:
+                print("\n********************************************************************************")
+                print("VALUE ERROR: Updated Priority must be an integer between 1 and 4. Please try again")
+                print("********************************************************************************\n")
 
         update_deadline = input("Enter the updated deadline of the task (MM/DD/YYYY): ")
 
-        task_queue.update_task(task_name,update_name, update_description, update_priority, update_deadline)
+        update_str = task_queue.update_task(task_name,update_name, update_description, update_priority, update_deadline)
+        print(f'{update_str}\n')
     
 def DeleteTask(task_queue):
     task_name = input("Enter the name of the task to be deleted: ")
-    task_queue.remove_task(task_name)
+    delete_str = task_queue.remove_task(task_name)
+    print(f'{delete_str}\n')
+    
+        
 
 def CompleteTask(task_queue):
     task_queue.complete_task()
@@ -118,10 +134,10 @@ def CompleteTask(task_queue):
 
 def FilterTasks(task_queue):
     if task_queue.isEmpty():
-        print("No tasks in the queue.")
+        print("No tasks in the queue.\n")
         return
     
-    task_filter = TaskFilter(task_queue.queue)
+    task_filter = Filter(task_queue.queue)
     print("\nFilter Options:")
     print("1. Filter by Keyword")
     print("2. Filter by Priority")
@@ -139,9 +155,9 @@ def FilterTasks(task_queue):
             deadline = input("Enter deadline (MM/DD/YYYY): ")
             task_filter.filter_by_deadline(deadline)
         else:
-            print("Invalid option. Returning to main menu.")
+            print("Invalid option. Returning to main menu.\n")
     except ValueError:
-        print("Invalid input. Returning to main menu.")
+        print("Invalid input. Returning to main menu.\n")
 
 
 if __name__ == "__main__":
